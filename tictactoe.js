@@ -21,7 +21,12 @@ function judge(a) { // 判定
   }
 }
 
-function resetGame() {
+function resetGame(allclear = false) { // ゲームをリセット
+  if(allclear){
+    battle_result = [0,0,0];
+    document.getElementById('scoreboard').innerText = '〇が0勝、×が0勝、引き分けは0回です。';
+    player = true;
+  }
   field = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   // ボタンのテキストをクリア
   document.querySelectorAll('button').forEach(button => button.innerText = '');
@@ -34,6 +39,27 @@ function show(winner) { // 勝った時の表示
 document.addEventListener('DOMContentLoaded', () => {
   const buttons = document.querySelectorAll('button');
   const scoreboard = document.getElementById('scoreboard');
+  const modeRadioButtons = document.querySelectorAll('input[name="mode"]');
+  const difficultyRadioButtons = document.querySelectorAll('input[name="difficulty_level"]');
+  difficultyRadioButtons.forEach(button => button.disabled = true);
+  modeRadioButtons.forEach(button => { 
+    button.addEventListener('change', (event) => { 
+      if (event.target.value === "PlayervsAI") { // AIと対戦する場合
+        difficultyRadioButtons.forEach(button => button.disabled = false); 
+
+      }else {
+        difficultyRadioButtons.forEach(button => button.disabled = true);
+      }
+      resetGame(true);
+    }
+  );
+  });
+  difficultyRadioButtons.forEach(button => { 
+    button.addEventListener('change', (event) => { 
+      resetGame(true);
+    }
+  );
+  });
   buttons.forEach(button => { // ボタンがクリックされた時の処理を登録
     button.addEventListener('click', (event) => { // ボタンがクリックされた時の処理
       const buttonId = event.target.id;
