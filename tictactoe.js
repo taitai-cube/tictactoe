@@ -1,7 +1,8 @@
+import {ai} from './ai.js';
+console.log(ai());
 let field = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 let player = true;
 let battle_result = [0,0,0]
-
 function judge(a) { // 判定
   function judge_same(b) { // 同じ値か判定
     if ((b[0] === b[1] && b[1] === b[2]) && (b[0] !== 0)) {
