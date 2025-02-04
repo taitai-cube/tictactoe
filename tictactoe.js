@@ -1,7 +1,7 @@
 import {ai} from './ai.js'; // aiをインポート
 
 let field = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-let player = true;
+let player = true; // 先攻後攻　trueなら先攻、falseなら後攻
 let start_player = true;
 let battle_result = [0,0,0]
 let mode = "PlayervsPlayer"; // モードがPlayer vs PlayerかPlayer vs AIか
@@ -25,21 +25,40 @@ function judge(a) { // 判定
   }
 }
 
+function ai_player(marubatu) { // AIの手 marubatuがtrueなら〇、falseなら×
+  let aiMove = ai(field, difficulty_level); // AIの手を取得
+  field[aiMove] = 2;
+  const ai_button = document.getElementById(`Button${aiMove + 1}`); // AIの手を表示
+  ai_button.innerText = !marubatu ? '〇' : '×';
+  console.log(field);
+  battle_finish(scoreboard); // ゲームが終了したか判定＆終了時の処理
+  
+}
+
 function resetGame(allclear = false) { // ゲームをリセット
   if(allclear){
     battle_result = [0,0,0];
     document.getElementById('scoreboard').innerText = '〇が0勝、×が0勝、引き分けは0回です。';
     player = true;
+    start_player = true;
   }
   field = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  document.querySelectorAll('button').forEach(button => button.innerText = '');
   if(mode !== "PlayervsAI"){
     player = !start_player;
     start_player = !start_player;
   }else{
-    player = true;
+    if(!allclear){
+      player = !start_player;
+      start_player = !start_player;
+    }
+    if(!start_player && !allclear){
+      ai_player(!player);
+      player = !player;
+      console.log("reset");
+    }
   }
   // ボタンのテキストをクリア
-  document.querySelectorAll('button').forEach(button => button.innerText = '');
   
 }
 
@@ -47,7 +66,7 @@ function show(winner) { // 勝った時の表示
   alert(winner + 'の勝ち');
 }
 
-function battle_finish(scoreboard) { // ゲーム終了時の処理
+function battle_finish(scoreboard) { // ゲーム終了時の表示処理
   if (judge(field)) { // 勝った時の処理
     const winner = player ? "〇" : "×";
     if (player) {
@@ -107,17 +126,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         event.target.innerText = player ? '〇' : '×';
         battle_finish(scoreboard); // ゲームが終了したか判定＆終了時の処理
-        if(mode === "PlayervsAI" && !judge(field) && field.includes(0)){ // AIと対戦する場合
-          player = !player; // 先攻後攻切り替え
-          let aiMove = ai(field, difficulty_level); // AIの手を取得
-          console.log(aiMove)
-          field[aiMove] = 2;
-          const ai_button = document.getElementById(`Button${aiMove + 1}`); // AIの手を表示
-          ai_button.innerText = '×';
-          console.log(field);
-          battle_finish(scoreboard); // ゲームが終了したか判定＆終了時の処理
-        }
         player = !player; // 先攻後攻切り替え
+        if(mode === "PlayervsAI" && !judge(field) && field.includes(0)){ // AIと対戦する場合
+          ai_player(!player);
+          player = !player; // 先攻後攻切り替え
+          console.log("normal");
+        }
       }
     });
   });
