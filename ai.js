@@ -1,4 +1,4 @@
-export function ai(field, difficulty_level = false, player, count) { // AIの手を取得
+export function ai(field, difficulty_level = false, start_player, count) { // AIの手を取得
   function random() {
     let availableIndices = []; // 空いているインデックスを格納する配列
     for (let i = 0; i < field.length; i++) { // 空いているインデックスをavailableIndicesに格納
@@ -74,7 +74,7 @@ export function ai(field, difficulty_level = false, player, count) { // AIの手
     }else if (reach_judge(field, 1)[0] !== null){ //相手にリーチがある場合
       return reach_judge(field, 1)[0];
     }else{
-      if (a !== null && a() !== null){
+      if (a !== null && a() !== null){ //ハードで、有効な手がある場合
         return a();
       }else{
         return random();
@@ -82,13 +82,36 @@ export function ai(field, difficulty_level = false, player, count) { // AIの手
     }
   }
   function hard_selecting(){
-    if (!player){ //aiが後攻の場合
+    if (start_player){ //aiが後攻の場合
       if (field[4] === 0 && count == 1){ //相手が真ん中を取っていない場合
         return 4;
       }else if (count == 3 && (field[0] === 1 && field[8] === 1) || (field[2] === 1 && field[6] === 1)){ //二回目のaiの番につみ回避
         return 1;
       }
+    }else{ //aiが先攻の場合
+      if (count == 0){ //初手
+        return 6;
+      }else if (count == 2){ //二手目
+        if (field[4] === 1){ //相手が真ん中を取った場合
+          return 2;
+        }else if (field[0] === 1 || field[8] === 1){ //相手が隣角を取った場合(左上、右下)
+          return 2;
+        }else if (field[2] === 1){ //相手が対角を取った場合(右上)
+          return 8;
+        }else{
+          return 4;
+        }
+      }else if (count == 4){
+        if (field[2] === 1){ //相手が対角を取った場合(右上)
+          return 0;
+        }else if (field[3] === 1){ //相手が隣エッジを取った場合(左)
+          return 8;
+        }else if (field[7] === 1){ //相手が隣エッジを取った場合(下)
+          return 0;
+        }
+      }
     }
+    console.log(count)
     return null
   }
   if (!difficulty_level){ //難易度が簡単な場合
