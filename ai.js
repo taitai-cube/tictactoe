@@ -87,7 +87,7 @@ export function ai(field, difficulty_level = false, start_player, count) { // AI
         return 4;
       }else if (count == 3 && (field[0] === 1 && field[8] === 1) || (field[2] === 1 && field[6] === 1)){ //二回目のaiの番につみ回避(はさみうち)
         return 1;
-      }else if (count === 3){ //相手がリーチを作っている場合(互い違い)
+      }else if (count === 3){ //相手がリーチを作っている場合(互い違い)の対策
         if (field[0] === 1){
           return 8;
         }else if (field[2] === 1){
