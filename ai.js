@@ -1,4 +1,4 @@
-export function ai(field, difficulty_level = false) {
+export function ai(field, difficulty_level = false, player, count) { // AIの手を取得
   function random() {
     let availableIndices = []; // 空いているインデックスを格納する配列
     for (let i = 0; i < field.length; i++) { // 空いているインデックスをavailableIndicesに格納
@@ -68,18 +68,32 @@ export function ai(field, difficulty_level = false) {
     return winning_moves;
 
   }
-  function normal_selecting(){
+  function normal_selecting(a=null){ // aに関数を入れることで、その関数を実行する
     if (reach_judge(field, 2)[0] !== null){ //自分にリーチがある場合
       return reach_judge(field, 2)[0];
     }else if (reach_judge(field, 1)[0] !== null){ //相手にリーチがある場合
       return reach_judge(field, 1)[0];
     }else{
-      return random();
+      if (a !== null && a() !== null){
+        return a();
+      }else{
+        return random();
+      }
     }
+  }
+  function hard_selecting(){
+    if (!player){ //aiが後攻の場合
+      if (field[4] === 0 && count == 1){ //相手が真ん中を取っていない場合
+        return 4;
+      }else if (count == 3 && field[0] === 1 && field[8] === 1){ //二回目のaiの番につみ回避
+        return 1;
+      }
+    }
+    return null
   }
   if (!difficulty_level){ //難易度が簡単な場合
     return normal_selecting();
   }else{ //難易度が難しい場合
-    return normal_selecting();
+    return normal_selecting(hard_selecting);
   }
 }

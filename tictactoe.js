@@ -6,6 +6,7 @@ let start_player = true;
 let battle_result = [0,0,0]
 let mode = "PlayervsPlayer"; // モードがPlayer vs PlayerかPlayer vs AIか
 let difficulty_level = false; // 難易度が簡単かどうか(簡単な場合はfalse)
+let count = 0;
 function judge(a) { // 判定
   function judge_same(b) { // 同じ値か判定
     if ((b[0] === b[1] && b[1] === b[2]) && (b[0] !== 0)) {
@@ -26,7 +27,7 @@ function judge(a) { // 判定
 }
 
 function ai_player(marubatu) { // AIの手 marubatuがtrueなら〇、falseなら×
-  let aiMove = ai(field, difficulty_level); // AIの手を取得
+  let aiMove = ai(field, difficulty_level, player, count); // AIの手を取得
   field[aiMove] = 2;
   const ai_button = document.getElementById(`Button${aiMove + 1}`); // AIの手を表示
   ai_button.innerText = !marubatu ? '〇' : '×';
@@ -40,6 +41,7 @@ function resetGame(allclear = false) { // ゲームをリセット
     battle_result = [0,0,0];
     document.getElementById('scoreboard').innerText = '〇が0勝、×が0勝、引き分けは0回です。';
     player = true;
+    count = 0;
     start_player = true;
   }
   field = [0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -47,14 +49,17 @@ function resetGame(allclear = false) { // ゲームをリセット
   if(mode !== "PlayervsAI"){
     player = !start_player;
     start_player = !start_player;
+    count = 0;
   }else{
     if(!allclear){
       player = !start_player;
       start_player = !start_player;
+      count = 0;
     }
     if(!start_player && !allclear){
       ai_player(!player);
       player = !player;
+      count = 1;
       console.log("reset");
     }
   }
@@ -127,9 +132,11 @@ document.addEventListener('DOMContentLoaded', () => {
         event.target.innerText = player ? '〇' : '×';
         battle_finish(scoreboard); // ゲームが終了したか判定＆終了時の処理
         player = !player; // 先攻後攻切り替え
+        count += 1;
         if(mode === "PlayervsAI" && !judge(field) && field.includes(0)){ // AIと対戦する場合
           ai_player(!player);
           player = !player; // 先攻後攻切り替え
+          count += 1;
           console.log("normal");
         }
       }
