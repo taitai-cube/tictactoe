@@ -85,7 +85,7 @@ export function ai(field, difficulty_level = false, player, count) { // AIの手
     if (!player){ //aiが後攻の場合
       if (field[4] === 0 && count == 1){ //相手が真ん中を取っていない場合
         return 4;
-      }else if (count == 3 && field[0] === 1 && field[8] === 1){ //二回目のaiの番につみ回避
+      }else if (count == 3 && (field[0] === 1 && field[8] === 1) || (field[2] === 1 && field[6] === 1)){ //二回目のaiの番につみ回避
         return 1;
       }
     }
