@@ -85,8 +85,18 @@ export function ai(field, difficulty_level = false, start_player, count) { // AI
     if (start_player){ //aiが後攻の場合
       if (field[4] === 0 && count == 1){ //相手が真ん中を取っていない場合
         return 4;
-      }else if (count == 3 && (field[0] === 1 && field[8] === 1) || (field[2] === 1 && field[6] === 1)){ //二回目のaiの番につみ回避
+      }else if (count == 3 && (field[0] === 1 && field[8] === 1) || (field[2] === 1 && field[6] === 1)){ //二回目のaiの番につみ回避(はさみうち)
         return 1;
+      }else if (count === 3){ //相手がリーチを作っている場合(互い違い)
+        if (field[0] === 1){
+          return 8;
+        }else if (field[2] === 1){
+          return 6;
+        }else if (field[6] === 1){
+          return 2;
+        }else if (field[8] === 1){
+          return 0;
+        }
       }
     }else{ //aiが先攻の場合
       if (count == 0){ //初手
