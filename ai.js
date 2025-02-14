@@ -112,11 +112,11 @@ export function ai(field, difficulty_level = false, start_player, count) { // AI
           return 4;
         }
       }else if (count == 4){
-        if (field[2] === 1){ //相手が対角を取った場合(右上)
-          return 0;
-        }else if (field[3] === 1){ //相手が隣エッジを取った場合(左)
+        if (field[3] === 1){ //相手が隣エッジを取った場合(左)
           return 8;
         }else if (field[7] === 1){ //相手が隣エッジを取った場合(下)
+          return 0;
+        }else if (field[2] === 1){ //相手が対角を取った場合(右上)
           return 0;
         }
       }
