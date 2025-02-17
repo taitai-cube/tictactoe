@@ -89,7 +89,9 @@ export function ai(field, difficulty_level = false, start_player, count) { // AI
         return 0;
       }else if (count == 3 && (field[0] === 1 && field[8] === 1) || (field[2] === 1 && field[6] === 1)){ //二回目のaiの番につみ回避(はさみうち)
         return 1;
-      }else if (count === 3){ //相手がリーチを作っている場合(互い違い)の対策
+      }else if (count == 3 && field.toString() == [2, 0, 0, 0, 1, 0, 0, 0, 1].toString()){ //相手がダブルリーチを作っている場合(矢印攻撃)
+        return 2;
+      }else if (count === 3){ //相手がダブルリーチを作っている場合(互い違い)の対策
         if (field[0] === 1){
           return 8;
         }else if (field[2] === 1){
@@ -97,6 +99,7 @@ export function ai(field, difficulty_level = false, start_player, count) { // AI
         }else if (field[6] === 1){
           return 2;
         }else if (field[8] === 1){
+          console.log("8")
           return 0;
         }
       }
