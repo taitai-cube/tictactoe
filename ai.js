@@ -126,7 +126,6 @@ export function ai(field, difficulty_level = false, start_player, count) { // AI
         }
       }
     }
-    console.log(count)
     return null
   }
   if (!difficulty_level){ //難易度が簡単な場合

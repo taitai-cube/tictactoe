@@ -28,11 +28,9 @@ function judge(a) { // 判定
 
 function ai_player(marubatu) { // AIの手 marubatuがtrueなら〇、falseなら×
   let aiMove = ai(field, difficulty_level, start_player, count); // AIの手を取得
-  console.log(aiMove);
   field[aiMove] = 2;
   const ai_button = document.getElementById(`Button${aiMove + 1}`); // AIの手を表示
   ai_button.innerText = !marubatu ? '〇' : '×';
-  console.log(field);
   battle_finish(scoreboard); // ゲームが終了したか判定＆終了時の処理
   
 }
@@ -61,7 +59,6 @@ function resetGame(allclear = false) { // ゲームをリセット
       ai_player(!player);
       player = !player;
       count = 1;
-      console.log("reset");
     }
   }
   // ボタンのテキストをクリア
@@ -138,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
           ai_player(!player);
           player = !player; // 先攻後攻切り替え
           count += 1;
-          console.log("normal");
         }
       }
     });
